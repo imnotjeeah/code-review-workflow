@@ -1,0 +1,26 @@
+workflow:
+  name: "code_review_flow"
+  max_iterations: 3
+
+agents:
+  - name: CodingAgent
+    class: agents.coding_agent.CodingAgent
+  - name: ReviewAgent
+    class: agents.review_agent.ReviewAgent
+  - name: FixAgent
+    class: agents.fix_agent.FixAgent
+
+flow:
+  - step: coding
+    agent: CodingAgent
+    next: review
+  - step: review
+    agent: ReviewAgent
+    next: condition
+  - step: condition
+    if: passed
+    then: end
+    else: fix
+  - step: fix
+    agent: FixAgent
+    next: review
